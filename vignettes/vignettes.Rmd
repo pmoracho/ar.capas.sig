@@ -1,0 +1,115 @@
+---
+title: "ar.capas.sig"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ar.capas.sig}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Capas geográficas publicadas por el IGN convertidas a objetos `sf`  más cómodos para R. Fuente: https://www.ign.gob.ar/NuestrasActividades/InformacionGeoespacial/CapasSIG
+
+## 200 millas desde la costa del sector antártico
+
+Zona marítima que se extiende más allá del límite exterior del mar territorial, hasta una distancia de 200 millas marinas a partir de la línea de base. Sector antártico.
+
+
+```{r doscientas_millas_sector_antartico, fig.height=5, fig.width=3}
+library(ggplot2)
+library(magrittr)
+library(ar.capas.sig)
+
+doscientas_millas_sector_antartico %>% 
+    ggplot() +
+    geom_sf(aes(geometry = geometry)) +
+    theme_bw()    
+```
+
+## Pais
+
+País se define como una nación jurídicamente organizada. En la entidad se incluyen los límites de la República Argentina.
+
+```{r pais, fig.height=5, fig.width=3}
+library(ggplot2)
+library(magrittr)
+library(ar.capas.sig)
+
+pais %>% 
+    ggplot() +
+    geom_sf(aes(geometry = geometry)) +
+    theme_bw()    
+```
+
+## Provincia
+
+División político territorial de primer orden. Incluye la Ciudad Autónoma de Buenos Aires (CABA).
+
+```{r provincia, fig.height=5, fig.width=4}
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+library(ar.capas.sig)
+
+provincia %>%
+    filter(fna %in% c('Provincia de Buenos Aires',
+                      'Ciudad Autónoma de Buenos Aires')) %>% 
+    ggplot() +
+    geom_sf(aes(geometry = geometry)) +
+    theme_bw()    
+```
+
+## Departamento
+
+División político administrativa de segundo orden que incluye partido y comuna.
+
+```{r departamento, fig.height=5, fig.width=5}
+library(ggplot2)
+library(ggrepel)
+library(magrittr)
+library(sf)
+library(ar.capas.sig)
+
+departamento %>%
+  filter(provincia_fna == 'Ciudad Autónoma de Buenos Aires') %>% 
+  ggplot() +
+    geom_sf(aes(geometry = geometry, fill=nam)) +
+    geom_text_repel(mapping = aes(coords_x, coords_y, label = nam), 
+                    size = 3.5, fontface="bold") +
+    theme_bw() +
+    theme(plot.title = element_blank(),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank())
+```
+
+## Municipios
+
+División político administrativa de tercer orden que incluye comunas,
+juntas vecinales y demás formas de gobierno local.
+
+```{r municipio, fig.height=5, fig.width=5}
+library(ggplot2)
+library(ggrepel)
+library(magrittr)
+library(sf)
+library(ar.capas.sig)
+
+municipio %>%
+  # filter(provincia_fna %in% c('Ciudad Autónoma de Buenos Aires')) %>% 
+    filter(provincia_fna %in% c('Provincia de Buenos Aires'),
+           nam %in% c('Tigre', 'San Fernando', 'San Isidro', 'Vicente López')) %>% 
+  ggplot() +
+    geom_sf(aes(geometry = geometry, fill=nam)) +
+    geom_text_repel(mapping = aes(coords_x, coords_y, label = nam), 
+                    size = 3.5, fontface="bold") +
+    theme_bw() +  
+    theme(plot.title = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank())
+```

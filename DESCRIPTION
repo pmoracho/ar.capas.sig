@@ -1,0 +1,25 @@
+Package: ar.capas.sig
+Type: Package
+Title: Argentina - Capas geográficas del Instituto geográfico nacional para R
+Version: 0.1.0
+Author: Patricio Moracho
+Maintainer: Patricio Moracho <pmoracho@gmail.com>
+Description: Capas geográficas publicadas por el IGN convertidas a objetos `sf`
+  más cómodos para R. Fuente: https://www.ign.gob.ar/NuestrasActividades/InformacionGeoespacial/CapasSIG.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+LazyDataCompression: xz
+Depends: 
+    R (>= 2.10)
+RoxygenNote: 7.1.2
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
+Imports:
+    ggplot2,
+    magrittr,
+    dplyr,
+    sf,
+    ggrepel
